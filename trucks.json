@@ -1,0 +1,23 @@
+{
+"trucks":
+    [
+        {
+    "id": 2115,
+    "name": "truck",
+    "capacity": 2000,
+    "weight_range": 4000
+        },
+        {
+    "id": 376,
+    "name": "truck1",
+    "capacity": 3424,
+    "weight_range": 4546
+        },
+        {
+    "id": 21241,
+    "name": "truck2",
+    "capacity": 2053,
+    "weight_range": 5435
+        }
+    ]
+}

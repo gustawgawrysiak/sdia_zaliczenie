@@ -1,0 +1,38 @@
+{
+  "parcels": [
+  {
+    "id":123,
+    "name": "Paczka",
+    "weight": 21.37,
+    "width": 15.0,
+    "height": 7.0,
+    "length": 8.0,
+    "date": "22/01/2022",
+    "priority":false
+
+  },
+  {
+
+    "id":123312,
+    "name": "Paczka1",
+    "weight": 1.37,
+    "width": 4.0,
+    "height": 6.0,
+    "length": 9.0,
+    "date": "28/01/2022",
+    "priority":false
+
+  },
+  {
+
+    "id":14324323,
+    "name": "Paczka2",
+    "weight": 5.37,
+    "width": 6.0,
+    "height": 1.0,
+    "length": 2.0,
+    "date": "01/01/2022",
+    "priority":false
+
+  }
+]}
