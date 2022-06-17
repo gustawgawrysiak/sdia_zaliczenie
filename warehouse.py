@@ -1,9 +1,8 @@
 from my_deque import Deque
 from my_priority_queue import PriorityQueue
-from parcels_import import create_parcels_list, create_parcel, import_json
+from parcels_import import ParcelsImport
 from parcel_dto import Parcel
 from typing import List
-# gucio
 
 
 class Warehouse:
@@ -18,15 +17,20 @@ class Warehouse:
     def normal(self):
         return self.storage['normal']
 
-    def add_parcel(self, parcel: Parcel) -> None:
-        if not parcel.priority:
-            self.storage['normal'].push_back(parcel)
-        else:
-            self.storage['prior'].attach(parcel)
+    def add_normal_parcel(self, parcel: Parcel) -> None:
+        self.normal.push_back(parcel)
+
+    def add_priority_parcels(self, parcels: List[Parcel]) -> None:
+        for i, parcel in enumerate(parcels):
+            self.prior.attach(parcel, i)
 
     def add_parcels_list(self, parcels: List[Parcel]) -> None:
+        parcel_priors = []
         for parcel in parcels:
-            self.add_parcel(parcel)
+            if parcel.priority:
+                parcel_priors.append(parcel)
+            else:
+                self.add_normal_parcel(parcel)
 
     def pop_normal(self) -> Parcel:
         return self.normal.pop_front()
@@ -34,11 +38,12 @@ class Warehouse:
     def pop_prior(self) -> Parcel:
         return self.prior.detach()
 
-    def give_parcel_priority(self, parcel: Parcel) -> int:
-        # tu nadanie priorytetu dla paczki, operacje na priorze i szukanie
-        pass
+    @staticmethod
+    def sort_priority_parcels(parcels_list: List[Parcel]) -> List[Parcel]:
+        new_parcels_list = sorted(parcels_list, key=lambda x: x.date, reverse=True)
+        return new_parcels_list
 
 
 e = Warehouse()
-e.add_parcels_list(create_parcels_list(parcels=import_json()))
-
+a = e.add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))
+print(e.prior)
