@@ -47,3 +47,4 @@ class Warehouse:
 e = Warehouse()
 a = e.add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))
 print(e.prior)
+Warehouse().add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))

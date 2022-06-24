@@ -24,3 +24,8 @@ class ParcelsImport:
         for parcel in parcels["parcels"]:
             result.append(ParcelsImport.create_parcel(parcel))
         return result
+
+
+# for k, v in ParcelsImport.import_json().items():
+#     for i in v:
+#         print(i['weight'])
