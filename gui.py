@@ -59,9 +59,8 @@ class MyWindow(QMainWindow):
     def load_parcels_json(self):
         self.file = QFileDialog.getOpenFileName(self, 'Wskaż plik json', '', 'Wszystkie pliki (*.*);; Plik json (*.json)', 'Plik json (*.json)')
         try:
-            if ParcelsImport.import_json(self.file[0]):
-                # uruchomienie sryptu
-                self.script()
+            parcels = ParcelsImport.import_json(self.file[0])
+            return parcels
         except JSONDecodeError:
             lbl_json = QLabel('Wskazano plik o formacie innym niż json. Proszę spróbować ponownie.')
             lbl_json.setAlignment(QtCore.Qt.AlignCenter)
@@ -72,9 +71,9 @@ class MyWindow(QMainWindow):
     def load_trucks_json(self):
         self.file = QFileDialog.getOpenFileName(self, 'Wskaż plik json', '', 'Wszystkie pliki (*.*);; Plik json (*.json)', 'Plik json (*.json)')
         try:
-            if ParcelsExport.import_json(self.file[0]):
+            if ParcelsExport.import_json(self.file[0]) and self.load_parcels_json:
                 # uruchomienie sryptu
-                self.script()
+                self.layout.addWidget(QLabel(str(self.load_parcels_json)))
         except JSONDecodeError:
             lbl_json = QLabel('Wskazano plik o formacie innym niż json. Proszę spróbować ponownie.')
             lbl_json.setAlignment(QtCore.Qt.AlignCenter)
@@ -82,7 +81,7 @@ class MyWindow(QMainWindow):
         except FileNotFoundError:
             pass
 
-    def script(self):
+    def script(self, parcels=None, trucks=None):
         # raise NotImplementedError
         pass
 
