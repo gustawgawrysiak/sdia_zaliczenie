@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from parcel_dto import Parcel
 from typing import List, Dict
+from exceptions import InvalidDtoSctructureError
 
 
 class ParcelsImport:
@@ -13,7 +14,7 @@ class ParcelsImport:
         return parcels
 
     @staticmethod
-    def create_parcel(parcel: Dict) -> Parcel:
+    def create_parcel(parcel: dict) -> Parcel:
         date_format = '%d/%M/%Y'
         date_str = parcel.pop('date')
         return Parcel(**parcel, date=datetime.strptime(date_str, date_format))
@@ -21,11 +22,6 @@ class ParcelsImport:
     @staticmethod
     def create_parcels_list(parcels: Dict[str, List[dict]]) -> List[Parcel]:
         result = []
-        for parcel in parcels["parcels"]:
+        for parcel in parcels.get("parcels"):
             result.append(ParcelsImport.create_parcel(parcel))
         return result
-
-
-# for k, v in ParcelsImport.import_json().items():
-#     for i in v:
-#         print(i['weight'])

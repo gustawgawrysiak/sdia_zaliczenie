@@ -2,13 +2,20 @@
 import json
 from my_deque import Deque
 from typing import List, Dict
+from parcel_dto import Parcel, Truck
 from parcels_import import ParcelsImport
+from warehouse import Warehouse
+from time import perf_counter
 
 
 class ParcelsExport:
 
     def __init__(self):
-        self.d = Deque()
+        self._d = []
+
+    @property
+    def lst(self):
+        return self._d
 
     @staticmethod
     def import_json(filename: str = 'trucks.json') -> Dict[str, List[dict]]:
@@ -17,27 +24,34 @@ class ParcelsExport:
             trucks_data.close()
         return trucks
 
-    def warehouse_parcel():
-        capacity_list = [capacity for capacity in v for v in ParcelsExport.import_json().values() if v['capacity']]
-        # for v_export in ParcelsExport.import_json().values():
-        #     for capacity in v_export:
-        #         capacity = capacity['capacity']
-        #         for v_import in ParcelsImport.import_json().values():
-        #             for weight in v_import:
-        #                 weight = weight['weight']
-        #                 if capacity >= weight:
-        #                     capacity -= weight
-        return capacity_list
+    @staticmethod
+    def create_truck(truck: dict) -> Truck:
+        return Truck(**truck, trunk=[])
 
+    def insert_trucks(self, trucks: Dict[str, List[dict]]):
+        for truck in trucks.get('trucks'):
+            self.d.append(ParcelsExport.create_truck(truck))
 
-    def truck_parcel(self):
-        # wkladanie paczki z magazynu do ciezarowki
-        pass
+    def pop_truck(self, parcel: Parcel) -> None:
+        return self.d.pop(0)
 
-
-for v in ParcelsExport.import_json().values():
-    for capacity in v:
-        print(capacity['capacity'])
-
-# print(ParcelsExport.warehouse_parcel())
-
+    def export_parcels(self, warehouse: Warehouse) -> None:
+        start = perf_counter()
+        for truck in self.d:
+            while not warehouse.prior_is_empty():
+                parcel = warehouse.front_prior()
+                volume = Warehouse.calculate_dimensions(parcel.height, parcel.width, parcel.length)
+                if not (truck.capacity + volume) >= truck.capacity:
+                    truck.add_parcel_to_trunk(parcel)
+                else:
+                    break
+            while not warehouse.normal_is_empty():
+                parcel = warehouse.front_prior()
+                volume = Warehouse.calculate_dimensions(parcel.height, parcel.width, parcel.length)
+                if not (truck.capacity + volume) > truck.capacity:
+                    truck.add_parcel_to_trunk(parcel)
+                else:
+                    break
+            end = perf_counter()
+            self._d.pop(self.lst.find())
+            print(end-start)
