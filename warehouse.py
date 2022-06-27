@@ -3,7 +3,6 @@ from my_priority_queue import PriorityQueue
 from parcels_import import ParcelsImport
 from parcel_dto import Parcel
 from typing import List
-from math import prod
 
 
 class Warehouse:
@@ -22,10 +21,8 @@ class Warehouse:
         self.normal.push_back(parcel)
 
     def add_priority_parcels(self, parcels: List[Parcel]) -> None:
-        i = len(parcels)
-        for parcel in parcels:
+        for i, parcel in enumerate(parcels):
             self.prior.attach(parcel, i)
-            i -= 1
 
     def add_parcels_list(self, parcels: List[Parcel]) -> None:
         parcel_priors = []
@@ -34,7 +31,6 @@ class Warehouse:
                 parcel_priors.append(parcel)
             else:
                 self.add_normal_parcel(parcel)
-        self.add_priority_parcels(self.sort_priority_parcels(parcel_priors))
 
     def pop_normal(self) -> Parcel:
         return self.normal.pop_front()
@@ -42,20 +38,13 @@ class Warehouse:
     def pop_prior(self) -> Parcel:
         return self.prior.detach()
 
-    def prior_is_empty(self) -> bool:
-        return self.storage.get('prior').is_empty()
-
-    def normal_is_empty(self) -> bool:
-        return self.storage.get('normal').is_empty()
-
-    def front_prior(self):
-        return self.storage.get('prior').front()
-
     @staticmethod
     def sort_priority_parcels(parcels_list: List[Parcel]) -> List[Parcel]:
         new_parcels_list = sorted(parcels_list, key=lambda x: x.date, reverse=True)
         return new_parcels_list
 
-    @staticmethod
-    def calculate_dimensions(*args) -> float:
-        return prod(args)
+
+e = Warehouse()
+a = e.add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))
+print(e.prior)
+Warehouse().add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))
