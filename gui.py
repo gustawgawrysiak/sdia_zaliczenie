@@ -4,24 +4,22 @@ from json import JSONDecodeError
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QGridLayout,
-    QCheckBox,
-    QRadioButton,
-    QFileDialog,
-    QPushButton,
-    QLabel,
-    QLineEdit,
-    QButtonGroup,
-    QMessageBox
+QApplication,
+QMainWindow,
+QWidget,
+QGridLayout,
+QCheckBox,
+QRadioButton,
+QFileDialog,
+QPushButton,
+QLabel,
+QLineEdit,
+QButtonGroup,
+QMessageBox
 )
 from functools import partial
 from warehouse import *
 from parcels_export import ParcelsExport
-
-
 # from PyQt5.QtGui import *
 
 class MyWindow(QMainWindow):
@@ -62,8 +60,7 @@ class MyWindow(QMainWindow):
         self.setWindowTitle(tytul)
 
     def load_parcels_json(self):
-        file = QFileDialog.getOpenFileName(self, 'Wskaż plik json', '',
-                                           'Wszystkie pliki (*.*);; Plik json (*.json)', 'Plik json (*.json)')
+        file = QFileDialog.getOpenFileName(self, 'Wskaż plik json', '', 'Wszystkie pliki (*.*);; Plik json (*.json)', 'Plik json (*.json)')
         try:
             path = os.path.normpath(file[0])
             self.file_parcels = path.split(os.sep)[-1]
@@ -83,12 +80,11 @@ class MyWindow(QMainWindow):
             pass
 
     def load_trucks_json(self):
-        file = QFileDialog.getOpenFileName(self, 'Wskaż plik json', '',
-                                           'Wszystkie pliki (*.*);; Plik json (*.json)', 'Plik json (*.json)')
+        file = QFileDialog.getOpenFileName(self, 'Wskaż plik json', '', 'Wszystkie pliki (*.*);; Plik json (*.json)', 'Plik json (*.json)')
         try:
             path = os.path.normpath(file[0])
             self.file_trucks = path.split(os.sep)[-1]
-            ParcelsExport.import_json(self.file_trucks)
+            e = ParcelsExport.import_json(self.file_trucks)
             if self.file_trucks and self.file_parcels:
                 self.check_json_structure()
         except JSONDecodeError:
@@ -102,6 +98,7 @@ class MyWindow(QMainWindow):
 
     def check_json_structure(self):
         raise NotImplementedError
+
 
 
 if __name__ == '__main__':
