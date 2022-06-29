@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 from parcel_dto import Parcel
 from typing import List, Dict
-from exceptions import InvalidDtoSctructureError
 
 
 class ParcelsImport:
