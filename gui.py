@@ -91,9 +91,9 @@ class FirstWindow(QMainWindow):
 
     def start(self):
         main = run()
-        self.lbl_main(QLabel(f'Całkowity czas wykonywania skryptu: {main.get("main_time")}'))
-        self.layout.addWidget(self.lbl_main)
-        self.lbl_warehouse(QLabel(f'Czas wykonywania skryptu magazynowego: {main.get("warehouse_time")}'))
+        lbl_main = QLabel(f'Całkowity czas wykonywania skryptu: {main.get("main_time")}')
+        self.layout.addWidget(lbl_main)
+        lbl_warehouse = QLabel(f'Czas wykonywania skryptu magazynowego: {main.get("warehouse_time")}')
         self.layout.addWidget(self.lbl_warehouse)
 
 
