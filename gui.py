@@ -91,10 +91,18 @@ class FirstWindow(QMainWindow):
 
     def start(self):
         main = run()
-        lbl_main = QLabel(f'Całkowity czas wykonywania skryptu: {main.get("main_time")}')
+        lbl_main = QLabel(f'Całkowity czas wykonywania skryptu: {main.get("main_time"):.5f}')
         self.layout.addWidget(lbl_main)
-        lbl_warehouse = QLabel(f'Czas wykonywania skryptu magazynowego: {main.get("warehouse_time")}')
-        self.layout.addWidget(self.lbl_warehouse)
+        lbl_warehouse = QLabel(f'Czas wykonywania skryptu magazynowego: {main.get("warehouse_time"):.5f}')
+        self.layout.addWidget(lbl_warehouse)
+        lbl_trucks_import = QLabel(f'Czas pobierania pliku .json z ciężarówkami: {main.get("trucks_import_time"):.5f}')
+        self.layout.addWidget(lbl_trucks_import)
+        lbl_parcels_import = QLabel(f'Czas pobierania pliku .json z paczkami: {main.get("parcels_import_time"):.5f}')
+        self.layout.addWidget(lbl_parcels_import)
+        lbl_parcels_send = QLabel(f'Liczba wysłanych paczek: {main.get("parcels_send"):.5f}')
+        self.layout.addWidget(lbl_parcels_send)
+        lbl_trucks_send = QLabel(f'Liczba wysłanych ciężarówek: {main.get("parcels_send"):.5f}')
+        self.layout.addWidget(lbl_trucks_send)
 
 
 if __name__ == '__main__':
