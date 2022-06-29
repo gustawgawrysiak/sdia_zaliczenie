@@ -24,10 +24,6 @@ class ParcelsExport:
     def create_truck(truck: dict) -> Truck:
         return Truck(**truck, trunk=[])
 
-    @staticmethod
-    def truck_send(id: str):
-        print(f"Truck {id} has left the storage!")
-
     def insert_trucks(self, trucks: Dict[str, List[dict]]):
         for truck in trucks.get('trucks'):
             self._dq.append(ParcelsExport.create_truck(truck))

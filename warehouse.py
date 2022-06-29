@@ -8,6 +8,16 @@ from parcels_export import ParcelsExport
 class Warehouse:
     def __init__(self):
         self._storage = {'normal': Deque(), 'prior': PriorityQueue()}
+        self._parcels_send = 0
+        self._trucks_send = 0
+
+    @property
+    def parcels_send(self):
+        return self._parcels_send
+
+    @property
+    def trucks_send(self):
+        return self._trucks_send
 
     @property
     def prior(self):
@@ -66,7 +76,6 @@ class Warehouse:
             flag = False
             while not self.prior_is_empty():
                 parcel = self.front_prior()[0]
-                print(parcel.id, 'prior')
                 volume = Warehouse.calculate_dimensions(parcel.height, parcel.width, parcel.length)
                 if self.parcel_fits(truck.capacity, truck.used_capacity,
                                     volume, truck.weight_range, truck.used_weight_range, parcel.weight):
@@ -74,31 +83,33 @@ class Warehouse:
                     truck.used_weight_range += parcel.weight
                     truck.used_capacity += volume
                     self.pop_prior()
+                    self._parcels_send += 1
                 else:
                     export.pop_truck()
-                    ParcelsExport.truck_send(truck.id)
+                    self._trucks_send += 1
                     flag = True
                     break
 
             while not self.normal_is_empty() and not flag:
                 parcel = self.front_normal()
-                print(parcel.id, 'normal')
                 volume = Warehouse.calculate_dimensions(parcel.height, parcel.width, parcel.length)
-                if self.parcel_fits(truck.capacity, truck.used_capacity,
-                                    volume, truck.weight_range, truck.used_weight_range, parcel.weight):
+                if self.parcel_fits(max_capacity=truck.capacity, used_capacity=truck.used_capacity,
+                                    volume=volume, max_weight=truck.weight_range,
+                                    used_weight=truck.used_weight_range, weight=parcel.weight):
                     truck.add_parcel_to_trunk(parcel)
                     truck.used_weight_range += parcel.weight
                     truck.used_capacity += volume
                     self.pop_normal()
+                    self._parcels_send += 1
                 else:
                     export.pop_truck()
-                    ParcelsExport.truck_send(truck.id)
+                    self._trucks_send += 1
                     break
 
-            if self.normal_is_empty() and self.prior_is_empty():
+            if self.normal_is_empty() and self.prior_is_empty() and truck.trunk:
                 export.pop_truck()
-                ParcelsExport.truck_send(truck.id)
 
     @staticmethod
-    def parcel_fits(max_capacity: float, used_capacity: float, volume: float, max_weight: float, used_weight: float, weight:float) -> bool:
+    def parcel_fits(max_capacity: float, used_capacity: float, volume: float,
+                    max_weight: float, used_weight: float, weight: float) -> bool:
         return ((used_capacity + volume) < max_capacity) and ((used_weight + weight) < max_weight)
