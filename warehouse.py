@@ -1,21 +1,21 @@
 from my_deque import Deque
 from my_priority_queue import PriorityQueue
-from parcels_import import ParcelsImport
 from parcel_dto import Parcel
 from typing import List
+from parcels_export import ParcelsExport
 
 
 class Warehouse:
     def __init__(self):
-        self.storage = {'normal': Deque(), 'prior': PriorityQueue()}
+        self._storage = {'normal': Deque(), 'prior': PriorityQueue()}
 
     @property
     def prior(self):
-        return self.storage['prior']
+        return self._storage['prior']
 
     @property
     def normal(self):
-        return self.storage['normal']
+        return self._storage['normal']
 
     def add_normal_parcel(self, parcel: Parcel) -> None:
         self.normal.push_back(parcel)
@@ -31,6 +31,8 @@ class Warehouse:
                 parcel_priors.append(parcel)
             else:
                 self.add_normal_parcel(parcel)
+        sorted_prior_parcels = self.sort_priority_parcels(parcel_priors)
+        self.add_priority_parcels(sorted_prior_parcels)
 
     def pop_normal(self) -> Parcel:
         return self.normal.pop_front()
@@ -38,13 +40,65 @@ class Warehouse:
     def pop_prior(self) -> Parcel:
         return self.prior.detach()
 
+    def normal_is_empty(self):
+        return self.normal.is_empty()
+
+    def front_prior(self):
+        return self.prior.front()
+
+    def front_normal(self):
+        return self.normal.front()
+
+    def prior_is_empty(self):
+        return self.prior.is_empty()
+
+    @staticmethod
+    def calculate_dimensions(width: float, height: float, length: float) -> float:
+        return width*height*length
+
     @staticmethod
     def sort_priority_parcels(parcels_list: List[Parcel]) -> List[Parcel]:
         new_parcels_list = sorted(parcels_list, key=lambda x: x.date, reverse=True)
         return new_parcels_list
 
+    def export_parcels(self, export: ParcelsExport) -> None:
+        for truck in export.dq:
+            flag = False
+            while not self.prior_is_empty():
+                parcel = self.front_prior()[0]
+                print(parcel.id, 'prior')
+                volume = Warehouse.calculate_dimensions(parcel.height, parcel.width, parcel.length)
+                if self.parcel_fits(truck.capacity, truck.used_capacity,
+                                    volume, truck.weight_range, truck.used_weight_range, parcel.weight):
+                    truck.add_parcel_to_trunk(parcel)
+                    truck.used_weight_range += parcel.weight
+                    truck.used_capacity += volume
+                    self.pop_prior()
+                else:
+                    export.pop_truck()
+                    ParcelsExport.truck_send(truck.id)
+                    flag = True
+                    break
 
-e = Warehouse()
-a = e.add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))
-print(e.prior)
-Warehouse().add_parcels_list(ParcelsImport.create_parcels_list(ParcelsImport.import_json()))
+            while not self.normal_is_empty() and not flag:
+                parcel = self.front_normal()
+                print(parcel.id, 'normal')
+                volume = Warehouse.calculate_dimensions(parcel.height, parcel.width, parcel.length)
+                if self.parcel_fits(truck.capacity, truck.used_capacity,
+                                    volume, truck.weight_range, truck.used_weight_range, parcel.weight):
+                    truck.add_parcel_to_trunk(parcel)
+                    truck.used_weight_range += parcel.weight
+                    truck.used_capacity += volume
+                    self.pop_normal()
+                else:
+                    export.pop_truck()
+                    ParcelsExport.truck_send(truck.id)
+                    break
+
+            if self.normal_is_empty() and self.prior_is_empty():
+                export.pop_truck()
+                ParcelsExport.truck_send(truck.id)
+
+    @staticmethod
+    def parcel_fits(max_capacity: float, used_capacity: float, volume: float, max_weight: float, used_weight: float, weight:float) -> bool:
+        return ((used_capacity + volume) < max_capacity) and ((used_weight + weight) < max_weight)

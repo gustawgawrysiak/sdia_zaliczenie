@@ -22,7 +22,8 @@ class Truck:
     name: str
     capacity: int
     weight_range: float
-    used_weight_range: Optional[float] #defult na 0 ustaw
+    used_weight_range: Optional[float]
+    used_capacity: Optional[float]
     trunk: List[Parcel]
 
     def add_parcel_to_trunk(self, parcel: Parcel) -> None:
