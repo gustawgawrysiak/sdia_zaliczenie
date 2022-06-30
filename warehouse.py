@@ -106,8 +106,10 @@ class Warehouse:
                     self._trucks_send += 1
                     break
 
-            if self.normal_is_empty() and self.prior_is_empty() and truck.trunk:
-                export.pop_truck()
+            if self.normal_is_empty() and self.prior_is_empty():
+                if truck.trunk:
+                    export.pop_truck()
+                break
 
     @staticmethod
     def parcel_fits(max_capacity: float, used_capacity: float, volume: float,
