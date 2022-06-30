@@ -1,7 +1,7 @@
 # main script path
-from parcels_export import ParcelsExport
-from warehouse import Warehouse
-from parcels_import import ParcelsImport
+from warehouse_control_panel.warehouse_backend.parcels_export import ParcelsExport
+from warehouse_control_panel.warehouse_backend.warehouse import Warehouse
+from warehouse_control_panel.warehouse_backend.parcels_import import ParcelsImport
 from time import perf_counter
 
 

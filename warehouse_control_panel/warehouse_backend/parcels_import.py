@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from parcel_dto import Parcel
+from warehouse_control_panel.data_structures.parcel_dto import Parcel
 from typing import List, Dict
 
 

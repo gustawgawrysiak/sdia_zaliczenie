@@ -1,8 +1,8 @@
-from my_deque import Deque
-from my_priority_queue import PriorityQueue
-from parcel_dto import Parcel
+from warehouse_control_panel.data_structures.my_deque import Deque
+from warehouse_control_panel.data_structures.my_priority_queue import PriorityQueue
+from warehouse_control_panel.data_structures.parcel_dto import Parcel
 from typing import List
-from parcels_export import ParcelsExport
+from warehouse_control_panel.warehouse_backend.parcels_export import ParcelsExport
 
 
 class Warehouse:

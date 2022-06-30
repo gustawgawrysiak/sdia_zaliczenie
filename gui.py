@@ -1,20 +1,16 @@
 import os
-import shutil
-from json import JSONDecodeError
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
-    QGridLayout,
     QFileDialog,
     QPushButton,
     QLabel,
-    QMessageBox,
     QVBoxLayout
 )
-from main import run
+from warehouse_control_panel.main import run
 
 class FirstWindow(QMainWindow):
 

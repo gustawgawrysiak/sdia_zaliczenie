@@ -1,7 +1,7 @@
 # klaudia
 import json
 from typing import List, Dict
-from parcel_dto import Truck
+from warehouse_control_panel.data_structures.parcel_dto import Truck
 
 
 class ParcelsExport:
