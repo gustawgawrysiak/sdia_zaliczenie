@@ -87,6 +87,7 @@ class FirstWindow(QMainWindow):
         self.btn_load_trucks.hide()
         self.btn_load_parcels.hide()
         self.btn_start.hide()
+        # self.window_title('Statystyki')
         self.start()
 
     def start(self):
@@ -99,7 +100,7 @@ class FirstWindow(QMainWindow):
         self.layout.addWidget(lbl_trucks_import)
         lbl_parcels_import = QLabel(f'Czas pobierania pliku .json z paczkami: {main.get("parcels_import_time"):.5f}')
         self.layout.addWidget(lbl_parcels_import)
-        lbl_parcels_send = QLabel(f'Liczba wysłanych paczek: {main.get("parcels_send"):.d}')
+        lbl_parcels_send = QLabel(f'Liczba wysłanych paczek: {main.get("parcels_send"):d}')
         self.layout.addWidget(lbl_parcels_send)
         lbl_trucks_send = QLabel(f'Liczba wysłanych ciężarówek: {main.get("parcels_send"):d}')
         self.layout.addWidget(lbl_trucks_send)
